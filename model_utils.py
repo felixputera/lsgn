@@ -45,7 +45,7 @@ def batch_gather(emb, indices):
 def lstm_contextualize(text_emb, text_len, config, lstm_dropout):
   num_sentences = tf.shape(text_emb)[0]
   current_inputs = text_emb  # [num_sentences, max_sentence_length, emb]
-  for layer in xrange(config["contextualization_layers"]):
+  for layer in range(config["contextualization_layers"]):
     with tf.variable_scope("layer_{}".format(layer)):
       with tf.variable_scope("fw_cell"):
         cell_fw = util.CustomLSTMCell(config["contextualization_size"], num_sentences, lstm_dropout)
@@ -143,7 +143,7 @@ def get_span_emb(head_emb, context_outputs, span_starts, span_ends, config, drop
       head_scores = util.projection(context_outputs, num_heads)  # [num_words, num_heads]
     span_attention = tf.nn.softmax(
       tf.gather(head_scores, span_indices) + tf.expand_dims(span_indices_log_mask, 2),
-      dim=1)  # [num_spans, max_arg_width, num_heads]
+      axis=1)  # [num_spans, max_arg_width, num_heads]
     span_head_emb = tf.reduce_sum(span_attention * span_text_emb, 1)  # [num_spans, emb]
     span_emb_list.append(span_head_emb)
 

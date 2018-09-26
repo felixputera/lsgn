@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
 import os
 import sys
 import time
@@ -21,10 +22,10 @@ if __name__ == "__main__":
   input_filename = sys.argv[2]
   output_filename = sys.argv[3]
 
-  print "Running experiment: {}.".format(name)
+  print("Running experiment: {}.".format(name))
   config = util.get_config("experiments.conf")[name]
   config["log_dir"] = util.mkdirs(os.path.join(config["log_root"], name))
-  print "Loading data from: {}.".format(input_filename)
+  print("Loading data from: {}.".format(input_filename))
   config["eval_path"] = input_filename
   config["batch_size"] = -1
   config["max_tokens_per_batch"] = -1
@@ -73,7 +74,7 @@ if __name__ == "__main__":
         doc_example["predicted_srl"] = []
         word_offset = 0
         for j, sentence in enumerate(sentences):
-          for pred, args in predictions["srl"][j].iteritems():
+          for pred, args in predictions["srl"][j].items():
             doc_example["predicted_srl"].extend([
                 [int(pred + word_offset), int(a[0] + word_offset),
                  int(a[1] + word_offset), a[2]] for a in args])
@@ -82,5 +83,5 @@ if __name__ == "__main__":
         f.write(json.dumps(doc_example))
         f.write("\n")
         if (i + 1) % 10 == 0:
-          print "Decoded {} documents.".format(i + 1)
+          print("Decoded {} documents.".format(i + 1))
 

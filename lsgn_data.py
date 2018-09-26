@@ -1,3 +1,4 @@
+from __future__ import print_function
 import tensorflow as tf
 import tensorflow_hub as hub
 
@@ -47,8 +48,8 @@ class LSGNData(object):
     self.lm_size = 0
     if config["lm_path"]:
       if "tfhub" in config["lm_path"]:
-        print "Using tensorflow hub:", config["lm_path"]
-        self.lm_hub = hub.Module(config["lm_path"].encode("utf-8"), trainable=False) 
+        print("Using tensorflow hub:", config["lm_path"])
+        self.lm_hub = hub.Module(config["lm_path"], trainable=False) 
       else:
         self.lm_file = h5py.File(self.config["lm_path"], "r")
       self.lm_layers = self.config["lm_layers"]
@@ -82,7 +83,7 @@ class LSGNData(object):
     self.label_names = _label_names
     self.predict_names = _predict_names
     self.batch_size = self.config["batch_size"]
-    dtypes, shapes = zip(*self.input_props)
+    dtypes, shapes = list(zip(*self.input_props))
     if self.batch_size > 0 and self.config["max_tokens_per_batch"] < 0:
       # Use fixed batch size if number of words per batch is not limited (-1).
       self.queue_input_tensors = [tf.placeholder(dtype, shape) for dtype, shape in self.input_props]
@@ -92,7 +93,7 @@ class LSGNData(object):
     else:
       # Use dynamic batch size.
       new_shapes = [[None] + shape for shape in shapes]
-      self.queue_input_tensors = [tf.placeholder(dtype, shape) for dtype, shape in zip(dtypes, new_shapes)]
+      self.queue_input_tensors = [tf.placeholder(dtype, shape) for dtype, shape in list(zip(dtypes, new_shapes))]
       queue = tf.PaddingFIFOQueue(capacity=2, dtypes=dtypes, shapes=new_shapes)
       self.enqueue_op = queue.enqueue(self.queue_input_tensors)
       self.input_tensors = queue.dequeue()

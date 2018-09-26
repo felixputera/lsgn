@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
 import os
 import re
 import sys
@@ -24,10 +25,10 @@ if __name__ == "__main__":
 
   if len(sys.argv) > 1:
     name = sys.argv[1]
-    print "Running experiment: {} (from command-line argument).".format(name)
+    print("Running experiment: {} (from command-line argument).".format(name))
   else:
     name = os.environ["EXP"]
-    print "Running experiment: {} (from environment variable).".format(name)
+    print("Running experiment: {} (from environment variable).".format(name))
 
   config = util.get_config("experiments.conf")[name]
   config["log_dir"] = util.mkdirs(os.path.join(config["log_root"], name))
@@ -46,7 +47,7 @@ if __name__ == "__main__":
 
   variables_to_restore = []
   for var in tf.global_variables():
-    print var.name
+    print(var.name)
     if "module/" not in var.name:
       variables_to_restore.append(var)
 
@@ -55,7 +56,7 @@ if __name__ == "__main__":
 
   with tf.Session() as session:
     checkpoint_path = os.path.join(log_dir, "model.max.ckpt")
-    print "Evaluating {}".format(checkpoint_path)
+    print("Evaluating {}".format(checkpoint_path))
     tf.global_variables_initializer().run()
     saver.restore(session, checkpoint_path)
     evaluator.evaluate(session, data, model.predictions, model.loss)

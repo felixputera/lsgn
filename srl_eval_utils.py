@@ -1,3 +1,4 @@
+from __future__ import print_function
 # Evaluation util functions for PropBank SRL.
 
 import codecs
@@ -45,9 +46,9 @@ def evaluate_retrieval(span_starts, span_ends, span_scores, pred_starts, pred_en
     gold_spans: Set of tuples of (start, end).
   """
   if len(span_starts) > 0:
-    sorted_starts, sorted_ends, sorted_scores = zip(*sorted(
+    sorted_starts, sorted_ends, sorted_scores = list(zip(*sorted(
         zip(span_starts, span_ends, span_scores),
-        key=operator.itemgetter(2), reverse=True))
+        key=operator.itemgetter(2), reverse=True)))
   else:
     sorted_starts = []
     sorted_ends = []
@@ -59,8 +60,8 @@ def evaluate_retrieval(span_starts, span_ends, span_scores, pred_starts, pred_en
         predicted_starts = pred_starts
         predicted_ends = pred_ends
         if debugging:
-          print "Predicted", zip(sorted_starts, sorted_ends, sorted_scores)[:len(gold_spans)]
-          print "Gold", gold_spans
+          print("Predicted", list(zip(sorted_starts, sorted_ends, sorted_scores))[:len(gold_spans)])
+          print("Gold", gold_spans)
      # FIXME: scalar index error
       elif k == 0:
         is_predicted = span_scores > 0
@@ -149,7 +150,7 @@ def compute_srl_f1(sentences, gold_srl, predictions, srl_conll_eval_path):
     gold_rels = 0
     pred_rels = 0
     matched = 0
-    for pred_id, gold_args in gold.iteritems():
+    for pred_id, gold_args in gold.items():
       filtered_gold_args = [a for a in gold_args if a[2] not in ["V", "C-V"]]
       total_gold += len(filtered_gold_args)
       gold_rels += len(filtered_gold_args)
@@ -163,7 +164,7 @@ def compute_srl_f1(sentences, gold_srl, predictions, srl_conll_eval_path):
             if a0[2] == a1[2]:
               total_matched += 1
               matched += 1
-    for pred_id, args in prediction.iteritems():
+    for pred_id, args in prediction.items():
       filtered_args = [a for a in args if a[2] not in ["V"]] # "C-V"]] 
       total_predicted += len(filtered_args)
       pred_rels += len(filtered_args)
@@ -176,7 +177,7 @@ def compute_srl_f1(sentences, gold_srl, predictions, srl_conll_eval_path):
 
   # Prepare to compute official F1.
   if not srl_conll_eval_path:
-    print "No gold conll_eval data provided. Recreating ..."
+    print("No gold conll_eval data provided. Recreating ...")
     gold_path = "/tmp/srl_pred_%d.gold" % os.getpid()
     print_to_conll(sentences, gold_srl, gold_path, None)
     gold_predicates = None

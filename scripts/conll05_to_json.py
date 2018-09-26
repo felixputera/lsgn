@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
 import itertools
 import re
 import os
@@ -221,7 +222,7 @@ def handle_line(line, document_state, language, num_cols, labels, stats):
 def minimize_partition(input_path, output_path, num_cols, labels, stats):
   count = 0
   language = "english"
-  print "Minimizing {}".format(input_path)
+  print("Minimizing {}".format(input_path))
   with open(input_path, "r") as input_file:
     with open(output_path, "w") as output_file:
       document_state = DocumentState()
@@ -234,7 +235,7 @@ def minimize_partition(input_path, output_path, num_cols, labels, stats):
           count += 1
           document_state = DocumentState()
           document_state.doc_key = "S{}".format(count)
-  print "Wrote {} documents to {}".format(count, output_path)
+  print("Wrote {} documents to {}".format(count, output_path))
 
 
 if __name__ == "__main__":

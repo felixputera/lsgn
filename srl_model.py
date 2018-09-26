@@ -36,7 +36,7 @@ class SRLModel(object):
       "sgd" : tf.train.GradientDescentOptimizer
     }
     optimizer = optimizers[self.config["optimizer"]](learning_rate)
-    self.train_op = optimizer.apply_gradients(zip(gradients, trainable_params),
+    self.train_op = optimizer.apply_gradients(list(zip(gradients, trainable_params)),
                                               global_step=self.global_step)
     # For debugging.
     # for var in tf.trainable_variables():

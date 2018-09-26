@@ -11,7 +11,7 @@ def decode_spans(span_starts, span_ends, span_scores, labels_inv):
   """
   pred_spans = []
   span_labels = np.argmax(span_scores, axis=1)  # [num_candidates]
-  spans_list = zip(span_starts, span_ends, span_labels, span_scores)
+  spans_list = list(zip(span_starts, span_ends, span_labels, span_scores))
   spans_list = sorted(spans_list, key=lambda x: x[3][x[2]], reverse=True)
   predicted_spans = {}
   for start, end, label, _ in spans_list:
@@ -104,7 +104,7 @@ def dp_decode(predict_dict, srl_labels_inv):
 
   for j, pred_id in enumerate(predicates):
     num_args = len(arg_starts)
-    args = zip(arg_starts, arg_ends, range(num_args))
+    args = list(zip(arg_starts, arg_ends, range(num_args)))
     args = sorted(args, key=lambda x: (x[0], x[1]))
     #print args
 
@@ -237,7 +237,7 @@ def _decode_non_overlapping_spans(starts, ends, scores, max_len, labels_inv, pre
 def _dp_decode_non_overlapping_spans(starts, ends, scores, max_len, labels_inv, pred_id, u_constraint=False):
   num_roles = scores.shape[1]
   labels = np.argmax(scores, axis=1)
-  spans = zip(starts, ends, range(len(starts)))
+  spans = list(zip(starts, ends, range(len(starts))))
   spans = sorted(spans, key=lambda x: (x[0], x[1]))
 
   if u_constraint:

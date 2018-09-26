@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
 import itertools
 import re
 import os
@@ -159,7 +160,7 @@ def handle_bit(word_index, bit, stack, spans, label_set):
     try:
       assert c == ")"
     except AssertionError:
-      print word_index, bit, spans, stack
+      print(word_index, bit, spans, stack)
       continue
     open_index, label = stack.pop()
     spans.append((open_index, word_index, label))
@@ -238,7 +239,7 @@ def handle_line(line, document_state, language, labels, stats):
 
 def minimize_partition(input_path, output_path, language, labels, stats):
   count = 0
-  print "Minimizing {}".format(input_path)
+  print("Minimizing {}".format(input_path))
   with open(input_path, "r") as input_file:
     with open(output_path, "w") as output_file:
       document_state = DocumentState()
@@ -249,7 +250,7 @@ def minimize_partition(input_path, output_path, language, labels, stats):
           output_file.write("\n")
           count += 1
           document_state = DocumentState()
-  print "Wrote {} documents to {}".format(count, output_path)
+  print("Wrote {} documents to {}".format(count, output_path))
 
 
 if __name__ == "__main__":

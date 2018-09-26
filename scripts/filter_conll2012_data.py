@@ -1,5 +1,6 @@
 """Filter OntoNotes5 data based on CoNLL2012 (coref) doc ids.
 """
+from __future__ import print_function
 import codecs
 import json
 import sys
